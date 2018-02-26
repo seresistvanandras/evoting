@@ -28,9 +28,11 @@ contract Election is Ownable  {
   }
 
 
-  function requestBlindlSig(uint256 blindedVote, address voter) onlyOwner public {
-    blindedVotes[blindedVote] = voter;
+  function requestBlindSig(uint256 blindedVote) public {
+    require(eligibleVoters[msg.sender].eligible);
+    blindedVotes[blindedVote] = msg.sender;
     RequestToBlindlySign(voter);
+    eligibleVoters[msg.sender].eligible = false; 
   }
 
   function writeBlindSig(address _voter, uint256 blindSig) onlyOwner public {
@@ -51,6 +53,6 @@ contract Election is Ownable  {
   }
   //TODO should verify the sig against the given pubKey
   function verifyBlindSig(uint256 blindlySignedVote) public returns (bool){
-
+//alá lett-e írva a publikus mod cuccosokkal
   }
 }
