@@ -46,7 +46,7 @@ contract Election is Ownable  {
   }
 
   function Vote(uint256 vote, uint256 blindlySignedVote) public {
-    require(verifyBlindSig(blindlySignedVote));
+    verifyBlindSig(vote,blindlySignedVote);
     votes[vote]++;
   }
 
@@ -57,8 +57,7 @@ contract Election is Ownable  {
   function removeEligibleVoter(address _voter) onlyOwner public {
     eligibleVoters[_voter].eligible = false;
   }
-  //TODO should verify the sig against the given pubKey
-  function verifyBlindSig(uint256 blindlySignedVote) public returns (bool){
+  function verifyBlindSig(uint256 vote,uint256 blindlySignedVote) public returns (bool){
       require(ECCMath.expmod(blindlySignedVote,publicExponent,publicModulo) == vote);
   }
 }
