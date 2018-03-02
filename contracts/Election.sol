@@ -25,6 +25,7 @@ contract Election is Ownable  {
   }
 
   event RequestToBlindlySign(address indexed voter);
+    event voteSuccess(address indexed voter, uint256 hashOfVote);
 
   //constructor
   function Election (string _question, uint256 _publicModulo, uint256 _publicExponent) public {
@@ -45,9 +46,13 @@ contract Election is Ownable  {
     eligibleVoters[_voter].signedBlindedVote = blindSig;
   }
 
-  function Vote(uint256 vote, uint256 blindlySignedVote) public {
-    verifyBlindSig(vote,blindlySignedVote);
-    votes[vote]++;
+  function Vote(uint256 choiceCode, uint256 vote, uint256 hashVote, uint256 blindlySignedVote) public {
+    verifyBlindSig(hashVote, blindlySignedVote);
+    require(sha3(vote)==bytes32(hashVote));
+    votes[choiceCode]++;
+
+    voteSuccess(msg.sender, hashVote);
+
   }
 
   function addEligibleVoter(address _voter) onlyOwner public {
@@ -58,6 +63,7 @@ contract Election is Ownable  {
     eligibleVoters[_voter].eligible = false;
   }
   function verifyBlindSig(uint256 vote,uint256 blindlySignedVote) public returns (bool){
-      require(ECCMath.expmod(blindlySignedVote,publicExponent,publicModulo) == vote);
+    require(ECCMath.expmod(blindlySignedVote,publicExponent,publicModulo) == vote);
   }
+    
 }
