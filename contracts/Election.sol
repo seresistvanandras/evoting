@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
-import {ECCMath} from "github.com/androlo/standard-contracts/contracts/src/crypto/ECCMath.sol";
+import {ECCMath} from "crypto/ECCMath.sol";
 
 contract Election is Ownable  {
   mapping (address => Voter) public eligibleVoters;
@@ -65,5 +65,22 @@ contract Election is Ownable  {
   function verifyBlindSig(uint256 vote,uint256 blindlySignedVote) public returns (bool){
     require(ECCMath.expmod(blindlySignedVote,publicExponent,publicModulo) == vote);
   }
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
