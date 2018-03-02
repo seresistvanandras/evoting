@@ -10,13 +10,16 @@ contract Election is Ownable  {
 
   string public question;
 
-  //96-bit random prime numbers
-  //prime1 52632226726678600070752309183
-  //prime2 4692554808980366270917812557
-  uint256 public publicModulo = 246979608633620626478852615866591005359742015214903810931;
-  //totient of the modulo 246979608633620626478852615809266223824083048873233689192
-  //privKey: 208099455097861223341963187893673510834579946576437192993
-  uint256 public publicExponent = 65537;
+  //prime1 11
+  //prime2 5
+  uint256 public publicModulo = 55;
+  
+  //privKey: 23
+  uint256 public publicExponent = 7;
+  
+  
+  uint256 public blindlySignedSig;
+  uint256 public verifiedSig;
 
   struct Voter {
     bool eligible;
@@ -26,7 +29,7 @@ contract Election is Ownable  {
 
   event RequestToBlindlySign(address indexed voter);
   event voteSuccess(address indexed voter, uint256 hashOfVote);
-  event debug(bytes32 vote, bytes32 votehash);
+  event debug(uint256 vote, uint256 votehash);
 
   //constructor
   function Election (string _question) public {
@@ -47,11 +50,14 @@ contract Election is Ownable  {
     eligibleVoters[_voter].signedBlindedVote = blindSig;
   }
 
+
+//uint(keccak256(uint(1))): 80084422859880547211683076133703299733277748156566366325829078699459944778998
+//keccak256(uint(1)): 0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6
+//blindlySignedShit: 22249075885109206276024811279364626717013279169439911258
   function Vote(uint256 choiceCode, uint256 vote, uint256 hashVote, uint256 blindlySignedVote) public {
-    //verifyBlindSig(hashVote, blindlySignedVote);
-    debug(keccak256(uint(vote)),bytes32(hashVote));
-    //@TODO casting hiba
-    require(keccak256(vote) == hashVote);
+    verifyBlindSig(hashVote, blindlySignedVote);
+    debug(uint(keccak256(uint(vote))),hashVote);
+    require(uint(keccak256(uint(vote))) == hashVote);
     votes[choiceCode]++;
 
     voteSuccess(msg.sender,hashVote);
@@ -65,24 +71,11 @@ contract Election is Ownable  {
     eligibleVoters[_voter].eligible = false;
   }
   function verifyBlindSig(uint256 vote,uint256 blindlySignedVote) public returns (bool){
-    require(ECCMath.expmod(blindlySignedVote,publicExponent,publicModulo) == vote);
+    require(ECCMath.expmod(blindlySignedVote,publicExponent,publicModulo) == (vote % publicModulo));
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+  function generatingSigs() public {
+   blindlySignedSig = ECCMath.expmod(uint(keccak256(uint(1))),23,publicModulo);
+   verifiedSig = ECCMath.expmod(blindlySignedSig,publicExponent,publicModulo);
+  }
 }
