@@ -25,10 +25,11 @@ contract Election is Ownable  {
   }
 
   event RequestToBlindlySign(address indexed voter);
-    event voteSuccess(address indexed voter, uint256 hashOfVote);
+  event voteSuccess(address indexed voter, uint256 hashOfVote);
+  event debug(bytes32 vote, bytes32 votehash);
 
   //constructor
-  function Election (string _question, uint256 _publicModulo, uint256 _publicExponent) public {
+  function Election (string _question) public {
     question = _question;
     //publicModulo = _publicModulo;
     //publicExponent = _publicExponent;
@@ -47,12 +48,13 @@ contract Election is Ownable  {
   }
 
   function Vote(uint256 choiceCode, uint256 vote, uint256 hashVote, uint256 blindlySignedVote) public {
-    verifyBlindSig(hashVote, blindlySignedVote);
-    require(sha3(vote)==bytes32(hashVote));
+    //verifyBlindSig(hashVote, blindlySignedVote);
+    debug(keccak256(uint(vote)),bytes32(hashVote));
+    //@TODO casting hiba
+    require(keccak256(vote) == hashVote);
     votes[choiceCode]++;
 
-    voteSuccess(msg.sender, hashVote);
-
+    voteSuccess(msg.sender,hashVote);
   }
 
   function addEligibleVoter(address _voter) onlyOwner public {
