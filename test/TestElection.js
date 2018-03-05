@@ -38,7 +38,16 @@ contract('Election', function(accounts) {
         });
     });
 
-
+    it("Voters should ony be able to cast a valid vote", function() {
+        return Election.deployed().then(function(instance) {
+            electionContractInstance.addEligibleVoter(accounts[0]);
+            return electionContractInstance.Vote(1,1,"80084422859880547211683076133703299733277748156566366325829078699459944778999",12);
+        }).then(() => {
+            assert.ok(false, "It didn't fail");
+    }, () => {
+            assert.ok(true, "Passed");
+        });
+    });
 
 
 });
