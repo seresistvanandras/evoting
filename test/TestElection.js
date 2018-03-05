@@ -38,7 +38,16 @@ contract('Election', function(accounts) {
         });
     });
 
-    it("Voters should ony be able to cast a valid vote", function() {
+    it("Votesuccess event should be emitted", function() {
+        return Election.deployed().then(function(instance) {
+            electionContractInstance.addEligibleVoter(accounts[0]);
+            return electionContractInstance.Vote(1,1,"80084422859880547211683076133703299733277748156566366325829078699459944778998",12);
+        }).then(function(member) {
+            assert.equal(member.logs[1].args.voter,accounts[0], 'The event is emitted');
+        });
+    });
+
+    it("Voters should be only able to cast a valid vote", function() {
         return Election.deployed().then(function(instance) {
             electionContractInstance.addEligibleVoter(accounts[0]);
             return electionContractInstance.Vote(1,1,"80084422859880547211683076133703299733277748156566366325829078699459944778999",12);
@@ -48,6 +57,8 @@ contract('Election', function(accounts) {
             assert.ok(true, "Passed");
         });
     });
+
+
 
 
 });
