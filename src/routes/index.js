@@ -9,6 +9,5 @@ module.exports = function(server, env) {
     next();
   });
 
-
   votingRoutes(server, env);
 };
