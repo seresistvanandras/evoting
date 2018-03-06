@@ -5,6 +5,7 @@ return {
 
   getEligibleVoter: async function(voter) {
     //TODO
+    db.electionInstance.eligibleVoters.methods.call(voter);
   },
 
 

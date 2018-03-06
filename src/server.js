@@ -73,8 +73,9 @@ let App = {
    require('./routes')(App.server, {
      web3: App.web3,
      accounts: App.accounts,
-     acceptorFactoryAddr: App.ElectionInstance._address,
-     acceptorFactoryABI: App.ElectionABI
+     electionAddr: App.ElectionInstance._address,
+     electionABI: App.ElectionABI,
+       electionInstance: App.ElectionInstance
    });
 
 
