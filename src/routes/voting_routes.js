@@ -60,7 +60,7 @@ module.exports = function(server, env) {
 
   // cast a vote from a newly generated Address
   server.post(
-    '/vote/cast/',
+    '/cast/',
     (req, res) => {
       let model = election.castVote(
         req.body.choiceCode,

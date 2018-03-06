@@ -23,7 +23,6 @@ return {
 
 
   postEligibleVoter: async function(voter) {
-
       let txHash= db.electionInstance.methods.addEligibleVoter(voter).send({from:db.accounts[0]});
   /*    let tx = db.electionInstance.methods.addEligibleVoter(voter);
       let rawTx = await offlinetx.getTxJson(tx, {from: db.accounts[0], gasPrice: "0x00"});
@@ -36,7 +35,7 @@ return {
 
 
   deleteEligibleVoter: async function(voter) {
-      let tx = db.electionInstance.methods.addEligibleVoter(voter);
+      let tx = db.electionInstance.methods.removeEligibleVoter(voter);
       let rawTx = await offlinetx.getTxJson(tx, {from: db.accounts[0], gasPrice: "0x00"});
 
       cacheValues = await cache.writeUnsentTxToCache(rawTx);
@@ -47,18 +46,13 @@ return {
 
 
   castVote: async function(choiceCode, vote, hashVote, blindlySingedVote) {
-      //@TODO untested
-      let tx = db.electionInstance.methods.Vote(choiceCode, vote, hashVote, blindlySingedVote);
-      let rawTx = await offlinetx.getTxJson(tx, {from: db.accounts[0], gasPrice: "0x00"});
+        console.log(choiceCode, vote, hashVote, blindlySingedVote);
+      let txHash = db.electionInstance.methods.Vote(choiceCode, vote, hashVote, blindlySingedVote).send({from: db.accounts[0]});
 
-      cacheValues = await cache.writeUnsentTxToCache(rawTx);
-      cache.setCache(cacheValues[0], JSON.stringify(cacheValues[1]));
-
-      return rawTx;
+      return txHash;
   },
 
     postRequestBlindSig: async function(blindedVote) {
-        //@TODO untested
         let tx = db.electionInstance.methods.requestBlindSig(blindedVote);
         let rawTx = await offlinetx.getTxJson(tx, {from: db.accounts[0], gasPrice: "0x00"});
         cacheValues = await cache.writeUnsentTxToCache(rawTx);
@@ -68,7 +62,6 @@ return {
     },
 
     postWriteBlindSig: async function(voter, blindSig) {
-        //@TODO untested
         let tx = db.electionInstance.methods.writeBlindSig(voter, blindSig);
         let rawTx = await offlinetx.getTxJson(tx, {from: db.accounts[0], gasPrice: "0x00"});
         cacheValues = await cache.writeUnsentTxToCache(rawTx);
@@ -77,14 +70,12 @@ return {
         return rawTx;
     },
 
-    postVerifyBlindSig: async function(voter, blindSig) {
-        //@TODO untested
-        let tx = db.electionInstance.methods.verifyBlindSig(voter, blindSig);
-        let rawTx = await offlinetx.getTxJson(tx, {from: db.accounts[0], gasPrice: "0x00"});
-        cacheValues = await cache.writeUnsentTxToCache(rawTx);
-        cache.setCache(cacheValues[0], JSON.stringify(cacheValues[1]));
+    postVerifyBlindSig: async function(vote, blindSig) {
+        //@TODO under testing
+        console.log(vote,blindSig);
+        let txHash = db.electionInstance.methods.verifyBlindSig(vote,blindSig).send({from: db.accounts[0]});
 
-        return rawTx;
+        return txHash;
     },
 
 }};
