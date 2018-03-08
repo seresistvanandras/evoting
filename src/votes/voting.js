@@ -71,8 +71,6 @@ return {
     },
 
     postVerifyBlindSig: async function(vote, blindSig) {
-        //@TODO under testing
-        console.log(vote,blindSig);
         let txHash = db.electionInstance.methods.verifyBlindSig(vote,blindSig).send({from: db.accounts[0]});
 
         return txHash;
