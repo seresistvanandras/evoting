@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <title>{{.PageTitle}}</title>
+
+    <style>
+        p span
+        {
+            padding: 25px;
+            display: block;
+        }
+    </style>
+
+</head>
+
+<script type='text/javascript'>
+
+        function use_api(arg) {
+            console.log(arg);
+            $.ajax({
+                url: "http://localhost:8080/selected",
+                data: {arg: arg}
+            }).done(function (data) {
+                var arr = data.split('</body>\n' +
+                        '</html>' +
+                        '');
+                $("#response").text(arr[1]);
+            });
+        }
+
+
+
+</script>
+<body>
+<div class="container">
+    {{with $1:=.PageRadioButtons}}
+    <h2>E-voting test</h2>
+
+        {{range $1}}
+
+<button type="button" class="btn btn-outline-primary" onclick=use_api({{.Value}}) name={{.Name}}  action={{.Action}} > {{.Text}} </button>
+                     {{end}}
+            </form>
+
+        {{end}}
+    </div>
+
+    <div><p><span id="response" ></span></p></div>
+
+      {{with $2:=.Answer}}
+    <p>Your answer is {{$2}}</p>
+    {{end}}
+
+</div>
+</body>
+</html>
