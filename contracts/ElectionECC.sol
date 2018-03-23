@@ -12,20 +12,13 @@ contract ElectionECC is Ownable  {
 
   string public question;
 
-
-  // Field size
-  uint constant pp = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
-
-  uint constant n = 0xFABCD;
+  uint constant n = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141;
 
   // Base point (generator) G
-  uint constant Gx = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
-  uint constant Gy = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8;
+
   //secp256k1 generator point
   uint256[3] public generatorPoint; //in affine coordinates
   uint256[3] public pubKeyOfOrganizer; //in affine coordinates
-
-
 
   struct Voter {
     bool eligible;
@@ -38,9 +31,15 @@ contract ElectionECC is Ownable  {
   event debug(uint256 vote, uint256 votehash);
 
   //constructor
-  function ElectionECC (string _question) public {
+  function ElectionECC (string _question, uint256 pubKeyX, uint256 pubKeyY) public {
     question = _question;
+    generatorPoint[0] = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
+    generatorPoint[1] = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8;
+    generatorPoint[2] = 1;
     //TODO hardcoding a pubkey
+    pubKeyOfOrganizer[0] = pubKeyX;
+    pubKeyOfOrganizer[1] = pubKeyY;
+    pubKeyOfOrganizer[2] = 1;
   }
 
   //blinded message should be recorded in order to be able to verify that Organizer provided a correct signature on the blinded msg
