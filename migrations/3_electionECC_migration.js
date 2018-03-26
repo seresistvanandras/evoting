@@ -1,5 +1,7 @@
-var ElectionECC = artifacts.require("./ElectionECC.sol");
+let ElectionECC = artifacts.require("./ElectionECC.sol");
+let ECCMultiplier = artifacts.require("./ECCMultiplier.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(ElectionECC, "what do you want? ECC");
+    deployer.link(ECCMultiplier, ElectionECC);
+
 };

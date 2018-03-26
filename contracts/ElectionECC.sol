@@ -31,14 +31,13 @@ contract ElectionECC is Ownable  {
   event debug(uint256 vote, uint256 votehash);
 
   //constructor
-  function ElectionECC (string _question, uint256 pubKeyX, uint256 pubKeyY) public {
+  function ElectionECC (string _question) public {
     question = _question;
     generatorPoint[0] = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
     generatorPoint[1] = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8;
     generatorPoint[2] = 1;
-    //TODO hardcoding a pubkey
-    pubKeyOfOrganizer[0] = pubKeyX;
-    pubKeyOfOrganizer[1] = pubKeyY;
+    pubKeyOfOrganizer[0] = 0x5982504b6c641ab4256ac941b6d645108ebab172b797a5d2f82c5905c4cb00c1;
+    pubKeyOfOrganizer[1] = 0x4995ad44d9a907c13100a9542f93c717019d97e09d51585d3fba54efaf74366d;
     pubKeyOfOrganizer[2] = 1;
   }
 
