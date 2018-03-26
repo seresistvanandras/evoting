@@ -14,7 +14,7 @@ contract('ElectionECC', function(accounts) {
             assert.equal(member[0], true, "Second account should be registered already");
         });
     });
-
+/*
     it("Organizer should be able to remove eligible voters", function() {
         return Election.deployed().then(function(instance) {
             electionContractInstance.addEligibleVoter(accounts[1]);
@@ -57,7 +57,7 @@ contract('ElectionECC', function(accounts) {
             assert.ok(true, "Passed");
         });
     });
-
+*/
 
 
 
