@@ -15,13 +15,17 @@ library ECCMultiplier {
         return output;
     }
 
+    //Point at infinity is (1,1,0)
     //scalar multiplication, P is in Jacobian, iterative algorithm, index increasing
     function multiply(uint256 d, uint[3] memory P) public view returns (uint[3]) {
       uint[3] memory N = P;
       uint[3] memory Q;
-      for(uint i=0; i < 256; i++) {
-        if(isOne(d,i)) {
-          Q = Secp256k1._add(N,Q);
+      Q[0] = 1;
+      Q[1] = 1;
+      //in the beginning Q should be the point of infinity
+      for(uint16 i=0; i < 256; i++) {
+        if(isOne(d,uint8(i))) {
+          Q = Secp256k1._add(Q,N);
         }
         N = Secp256k1._double(N);
       }
