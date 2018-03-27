@@ -22,9 +22,13 @@
   },
   "homepage": "https://github.com/itblockchain/evoting#readme",
   "dependencies": {
+    "bigi": "^1.4.2",
+    "coinstring": "^2.0.0",
+    "ecurve": "^1.0.0",
     "ethereumjs-util": "^5.1.5",
     "express": "^4.16.2",
-    "truffle": "^4.1.0",
+    "node-forge": "^0.7.4",
+    "truffle": "^4.1.3",
     "web3": "^1.0.0-beta.30",
     "zeppelin-solidity": "1.7.0"
   },

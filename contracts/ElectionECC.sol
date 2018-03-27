@@ -80,7 +80,7 @@ contract ElectionECC is Ownable  {
     uint[3] memory cP = ECCMultiplier.multiply(c,pubKeyOfOrganizer);
     uint[3] memory sG = ECCMultiplier.multiply(s, generatorPoint);
 
-    uint[3] memory sum = Secp256k1._add(cP, sG);
+    uint[3] memory sum = Secp256k1._add(cP, sG); //maybe need to convert the x coordinate to affine coordinate from Jacobian coordinate before projecting the x coordinate
     uint projection = sum[0] % n;
     require(c == uint(keccak256(m,projection)));
   }

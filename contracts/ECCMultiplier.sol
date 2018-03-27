@@ -3,6 +3,7 @@ import {Secp256k1} from "crypto/Secp256k1.sol";
 
 library ECCMultiplier {
 
+  //Warning it seems this function does not really work properly
   function toBinaryBoolArray(uint256 n) public pure returns (bool[256]) {
         bool[256] memory output;
 
@@ -14,14 +15,13 @@ library ECCMultiplier {
         return output;
     }
 
-    //scalar multiplication, P is in Jacobian
+    //scalar multiplication, P is in Jacobian, iterative algorithm, index increasing
     function multiply(uint256 d, uint[3] memory P) public view returns (uint[3]) {
-      bool[256] memory binaryRep = toBinaryBoolArray(d);
       uint[3] memory N = P;
       uint[3] memory Q;
       for(uint i=0; i < 256; i++) {
-        if(binaryRep[255-i]) {
-          Q = Secp256k1._add(P,Q);
+        if(isOne(d,i)) {
+          Q = Secp256k1._add(N,Q);
         }
         N = Secp256k1._double(N);
       }

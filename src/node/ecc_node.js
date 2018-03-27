@@ -122,10 +122,6 @@ var toHash = add(multiply(curvePt,c.mod(n)),multiply(ecparams.G,s.mod(n))).x.mod
 
 console.log(keccak256(m+toHash));
 
-
-
-
-
-
-
-
+console.log("Generator point: ", G.toString())
+console.log("Doubling the generatorPoint", multiply(G,BigInteger.fromBuffer(new Buffer("02", 'hex'))).toString())
+console.log("Doubling with self-addition",add(G,G).toString())
