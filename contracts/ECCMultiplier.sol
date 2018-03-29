@@ -15,6 +15,20 @@ library ECCMultiplier {
         return output;
     }
 
+    function toBinaryString(uint256 n) public pure returns (string) {
+        // revert on out of range input
+        require(n < 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF);
+
+        bytes memory output = new bytes(32);
+
+        for (uint256 i = 0; i < 31; i++) {
+            output[32 - i] = (n % 2 == 1) ? byte("1") : byte("0");
+            n /= 2;
+        }
+
+        return string(output);
+    }
+
     //Point at infinity is (1,1,0)
     //scalar multiplication, P is in Jacobian, iterative algorithm, index increasing
     function multiply(uint256 d, uint[3] memory P) public view returns (uint[3]) {

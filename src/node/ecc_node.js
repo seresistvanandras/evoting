@@ -4,12 +4,23 @@ var ecurve = require('ecurve') //npm install --save ecurve@1.0.0
 var cs = require('coinstring') //npm install --save coinstring@2.0.0
 var forge = require('node-forge')
 
+
 function random(bytes){
     do {
         var k = BigInteger.fromByteArrayUnsigned(crypto.randomBytes(bytes));
     } while (k.toString() == "0" && k.gcd(n).toString() != "1")
     return k;
 }
+
+
+/*
+function random(bytes){
+    do {
+        var k = BigInteger.fromByteArrayUnsigned(crypto.randomBytes(bytes));
+    } while (k.toString() != "2")
+    return k;
+}
+*/
 
 function isOnCurve (x,y) {
 
@@ -69,6 +80,9 @@ var y = curvePt.affineY.toBuffer(32);
 var G = ecparams.G;
 var n = ecparams.n;
 
+console.log(ecparams.G.x.toHex())
+console.log(BigInteger.fromBuffer(y).toHex())
+
 /* STEP 1
 The signer randomly selects an integer k ∈ Zn
 , calculates R = kG, and then transmits R to the
@@ -78,6 +92,37 @@ requester
 k = random(32);
 
 var R = multiply(G,k);
+
+
+
+/*
+7d152c041ea8e1dc2191843d1fa9db55b68f88fef695e2c791d40444b365afc2
+56915849f52cc8f76f5fd7e4bf60db4a43bf633e1b1383f85fe89164bfadcbdb
+9075b4ee4d4788cabb49f7f81c221151fa2f68914d0aa833388fa11ff621a970
+*/
+
+var zwei = BigInteger.fromBuffer(new Buffer("2"));
+var drei = BigInteger.fromBuffer(new Buffer("3"));
+
+var z = BigInteger.fromBuffer(new Buffer("9075b4ee4d4788cabb49f7f81c221151fa2f68914d0aa833388fa11ff621a970", 'hex'));
+var zSquare = (z.pow(2).mod(ecparams.p))
+var zCube = (z.pow(3).mod(ecparams.p)) // =112386024462437979217642839804619380985487717678471186887195924032703633398313
+
+/* EZT KELLENE KAPNI
+7d152c041ea8e1dc2191843d1fa9db55b68f88fef695e2c791d40444b365afc2
+56915849f52cc8f76f5fd7e4bf60db4a43bf633e1b1383f85fe89164bfadcbdb
+9075b4ee4d4788cabb49f7f81c221151fa2f68914d0aa833388fa11ff621a970
+
+    uint zInv = invmod(PJ[2], prime);
+    uint zInv2 = mulmod(zInv, zInv, prime);
+    PJ[0] = mulmod(PJ[0], zInv2, prime);
+    PJ[1] = mulmod(PJ[1], mulmod(zInv, zInv2, prime), prime);
+    PJ[2] = 1;
+*/
+
+
+//console.log((R.x.multiply(z.modInverse(ecparams.p)).mod(ecparams.p).toHex()));
+
 
 /* STEP 2
 The requester randomly selects two integers γ and δ ∈ Zn, blinds the message, and then
@@ -113,15 +158,19 @@ The requester calculates s = s’ + γ, and (c, s) is the signature on m.
 
 var s = sBlind.add(γ);
 
+console.log(s.mod(n).toString())
+
 /* STEP 5
 Both the requester and signer can verify the signature (c, s) through the formation
 c = SHA256(m || Rx(cP + sG) mod n)
 */
 
 var toHash = add(multiply(curvePt,c.mod(n)),multiply(ecparams.G,s.mod(n))).x.mod(n)
-
+/*
 console.log(keccak256(m+toHash));
 
 console.log("Generator point: ", G.toString())
 console.log("Doubling the generatorPoint", multiply(G,BigInteger.fromBuffer(new Buffer("02", 'hex'))).toString())
 console.log("Doubling with self-addition",add(G,G).toString())
+*/
+

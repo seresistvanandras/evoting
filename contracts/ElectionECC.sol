@@ -1,8 +1,8 @@
 pragma solidity ^0.4.18;
 
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
-import {ECCMath} from "crypto/ECCMath.sol";
-import {Secp256k1} from "crypto/Secp256k1.sol";
+import {ECCMath} from "./ECCMath.sol";
+import {Secp256k1} from "./Secp256k1.sol";
 import {ECCMultiplier} from "./ECCMultiplier.sol";
 
 contract ElectionECC is Ownable  {
@@ -13,12 +13,18 @@ contract ElectionECC is Ownable  {
   string public question;
 
   uint constant n = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141;
+  uint constant p = 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f;
 
   // Base point (generator) G
 
   //secp256k1 generator point
   uint256[3] public generatorPoint; //in affine coordinates
   uint256[3] public pubKeyOfOrganizer; //in affine coordinates
+
+  uint[3] public cPstorage;
+  uint[3] public sGstorage;
+  uint[3] public sumStorage;
+  uint[3] public affinSumStorage;
 
   struct Voter {
     bool eligible;
@@ -36,8 +42,8 @@ contract ElectionECC is Ownable  {
     generatorPoint[0] = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
     generatorPoint[1] = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8;
     generatorPoint[2] = 1;
-    pubKeyOfOrganizer[0] = 0x5982504b6c641ab4256ac941b6d645108ebab172b797a5d2f82c5905c4cb00c1;
-    pubKeyOfOrganizer[1] = 0x4995ad44d9a907c13100a9542f93c717019d97e09d51585d3fba54efaf74366d;
+    pubKeyOfOrganizer[0] = 0xd0988bfa799f7d7ef9ab3de97ef481cd0f75d2367ad456607647edde665d6f6f;
+    pubKeyOfOrganizer[1] = 0xbdd594388756a7beaf73b4822bc22d36e9bda7db82df2b8b623673eefc0b7495;
     pubKeyOfOrganizer[2] = 1;
   }
 
@@ -76,13 +82,20 @@ contract ElectionECC is Ownable  {
   }
 
   //The core of the contract: onchain ECC BlindSig verification
-  function verifyBlindSig(uint256 m, uint256 c, uint256 s) public returns (bool){
+  function verifyBlindSig(uint256 m, uint256 c, uint256 s) public {
     uint[3] memory cP = ECCMultiplier.multiply(c,pubKeyOfOrganizer);
     uint[3] memory sG = ECCMultiplier.multiply(s, generatorPoint);
 
     uint[3] memory sum = Secp256k1._add(cP, sG); //maybe need to convert the x coordinate to affine coordinate from Jacobian coordinate before projecting the x coordinate
-    uint projection = sum[0] % n;
-    require(c == uint(keccak256(m,projection)));
+    uint[3] memory affineSum = ECCMath.toZ12(sum,p);
+    uint projection = affineSum[0] % n;
+
+    cPstorage = cP;
+    sGstorage = sG;
+    sumStorage = sum;
+    affinSumStorage = affineSum;
+
+    //require(c == uint(keccak256(m,projection)));
   }
 
 }
