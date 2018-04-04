@@ -33,8 +33,7 @@ contract ElectionECC is Ownable  {
   }
 
   event RequestToBlindlySign(address indexed voter);
-  event voteSuccess(address indexed voter, uint256 hashOfVote);
-  event debug(uint256 vote, uint256 votehash);
+  event voteSuccess(address indexed voter, uint hashOfVote);
 
   //constructor
   function ElectionECC (string _question) public {
@@ -52,7 +51,6 @@ contract ElectionECC is Ownable  {
     require(eligibleVoters[msg.sender].eligible);
     blindedVotes[blindedVote] = msg.sender;
     RequestToBlindlySign(msg.sender);
-
   }
 
   //requested blindSig is recorded on the blockchain for auditing purposes
@@ -62,10 +60,7 @@ contract ElectionECC is Ownable  {
   }
 
 
-//uint(keccak256(uint(1))): 80084422859880547211683076133703299733277748156566366325829078699459944778998
-//keccak256(uint(1)): 0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6
-//blindlySignedShit: 22249075885109206276024811279364626717013279169439911258
-  function Vote(uint256 choiceCode, uint256 vote, uint256 hashVote, uint256 c, uint256 s) public {
+  function Vote(uint256 choiceCode, uint256 vote, uint hashVote, uint256 c, uint256 s) public {
     verifyBlindSig(hashVote, c, s);
     require(uint(keccak256(uint(vote))) == hashVote);
     votes[choiceCode]++;
@@ -81,13 +76,30 @@ contract ElectionECC is Ownable  {
     eligibleVoters[_voter].eligible = false;
   }
 
+  function uintToString(uint v) constant returns (string str) {
+    uint maxlength = 78;
+    bytes memory reversed = new bytes(maxlength);
+    uint i = 0;
+    while (v != 0) {
+      uint remainder = v % 10;
+      v = v / 10;
+      reversed[i++] = byte(48 + remainder);
+    }
+    bytes memory s = new bytes(i);
+    for (uint j = 0; j < i; j++) {
+      s[j] = reversed[i - 1 - j];
+    }
+    str = string(s);
+  }
+
   //The core of the contract: onchain ECC BlindSig verification
   function verifyBlindSig(uint256 m, uint256 c, uint256 s) public {
+
     uint[3] memory cP = ECCMultiplier.multiply(c,pubKeyOfOrganizer);
     uint[3] memory sG = ECCMultiplier.multiply(s, generatorPoint);
-
-    uint[3] memory sum = Secp256k1._add(cP, sG); //maybe need to convert the x coordinate to affine coordinate from Jacobian coordinate before projecting the x coordinate
+    uint[3] memory sum = Secp256k1._add(cP, sG); //need to convert the x coordinate to affine coordinate from Jacobian coordinate before projecting the x coordinate
     uint[3] memory affineSum = ECCMath.toZ12(sum,p);
+
     uint projection = affineSum[0] % n;
 
     cPstorage = cP;
@@ -95,7 +107,8 @@ contract ElectionECC is Ownable  {
     sumStorage = sum;
     affinSumStorage = affineSum;
 
-    //require(c == uint(keccak256(m,projection)));
+    require(c == uint(keccak256(uintToString(m),uintToString(projection))));
   }
+
 
 }

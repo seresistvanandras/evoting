@@ -1,5 +1,6 @@
 // Specifically request an abstraction for Registry
 var Election = artifacts.require("ElectionECC");
+var BigNumber = require('bignumber.js');
 
 contract('ElectionECC', function(accounts) {
 
@@ -20,10 +21,9 @@ contract('ElectionECC', function(accounts) {
     it("Verify", function() {
         return Election.deployed().then(function(instance) {
             electionContractInstance = instance;
-            electionContractInstance.verifyBlindSig("69","0x242b07d274f3edfd1ebbb4aea9d55871cf1d699e15a0c852ccf35bd50887ea4f",'0xaf7905e468c16f9e637d647a08aa0c7f1e4ae05f7426ae13b9f0fddab85ad6e6');
-            return electionContractInstance.cPstorage.call(0);
+           return electionContractInstance.verifyBlindSig("69","0xdb9f6c2cf9c85641480217baa1427cdc2d9021cb1dc3cccf75cb33e023863532",'0xf3995a330ac0a340b4dbea5c932c9ca3e5108f319c76d3182499ff473c298fb7');
         }).then(function(member) {
-            console.log(new BigNumber(member).toString(16));
+            //console.log(member.toString());
             //console.log(new BigNumber(member[1]).toString(16));
             //console.log(new BigNumber(member[2]).toString(16));
         });
