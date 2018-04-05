@@ -28,6 +28,20 @@ contract('ElectionECCwPrecompile', function(accounts) {
             //console.log(new BigNumber(member[2]).toString(16));
         });
     });
+
+    it("Vote", function() {
+        return Election.deployed().then(function(instance) {
+            electionContractInstance = instance;
+            return electionContractInstance.Vote(1,1,"90743482286830539503240959006302832933333810038750515972785732718729991261126","36569675563270980802762714306156177901149277261141117320653538205171502807189","6584969667293602680567734539575163142389903381909774456551685991814241531484");
+        }).then(function(member) {
+            console.log(member);
+            return electionContractInstance.votes.call(1).then(function (value) {
+                console.log(value.toString());
+            });
+            //console.log(new BigNumber(member[1]).toString(16));
+            //console.log(new BigNumber(member[2]).toString(16));
+        });
+    });
     /*
         it("Organizer should be able to remove eligible voters", function() {
             return Election.deployed().then(function(instance) {

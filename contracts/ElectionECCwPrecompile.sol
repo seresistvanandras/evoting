@@ -60,7 +60,7 @@ contract ElectionECCwPrecompile is Ownable  {
 //blindlySignedShit: 22249075885109206276024811279364626717013279169439911258
   function Vote(uint256 choiceCode, uint256 vote, uint256 hashVote, uint256 c, uint256 s) public {
     verifyBlindSig(choiceCode, c, s);
-    require(uint(keccak256(uint(vote))) == hashVote);
+    require(uint(keccak256(uintToString(vote))) == hashVote);
     votes[choiceCode]++;
 
     voteSuccess(msg.sender,hashVote);
