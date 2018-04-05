@@ -59,12 +59,13 @@ contract ElectionECCwPrecompile is Ownable  {
 //keccak256(uint(1)): 0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6
 //blindlySignedShit: 22249075885109206276024811279364626717013279169439911258
   function Vote(uint256 choiceCode, uint256 vote, uint256 hashVote, uint256 c, uint256 s) public {
-    verifyBlindSig(hashVote, c, s);
+    verifyBlindSig(choiceCode, c, s);
     require(uint(keccak256(uint(vote))) == hashVote);
     votes[choiceCode]++;
 
     voteSuccess(msg.sender,hashVote);
   }
+
 
   function addEligibleVoter(address _voter) onlyOwner public {
     eligibleVoters[_voter].eligible = true;
