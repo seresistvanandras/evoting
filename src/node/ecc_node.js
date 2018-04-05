@@ -68,7 +68,8 @@ function keccak256(inp){
 
 var privateKey = new Buffer("1184cd2cdd640ca42cfc3a091c51d549b2f016d454b2774019c2b2d2e08529fd", 'hex')
 
-var m  = "69";
+
+var m  = "1";
 
 var ecparams = ecurve.getCurveByName('altBN128'); //or secp256k1
 var curvePt = ecparams.G.multiply(BigInteger.fromBuffer(privateKey));
@@ -140,9 +141,16 @@ c = SHA256(m || Rx(cP + sG) mod n)
 */
 
 var toHash = add(multiply(curvePt,c.mod(n)),multiply(ecparams.G,s.mod(n))).x.mod(n)
+console.log("c: ")
+console.log(BigInteger.fromHex(keccak256(m+toHash)).toString());
 
-console.log(keccak256(m+toHash));
+console.log("s: ")
+console.log(s.mod(n).toString())
 
+console.log("hashvote: ")
+console.log(BigInteger.fromHex(keccak256(m)).toString())
+
+//1,1,"90743482286830539503240959006302832933333810038750515972785732718729991261126","36569675563270980802762714306156177901149277261141117320653538205171502807189","6584969667293602680567734539575163142389903381909774456551685991814241531484"
 /*
 console.log("Generator point: ", G.toString())
 console.log("Doubling the generatorPoint", multiply(G,BigInteger.fromBuffer(new Buffer("02", 'hex'))).toString())
