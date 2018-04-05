@@ -12,7 +12,7 @@ contract ElectionECCwPrecompile is Ownable  {
   //https://github.com/ethereum/EIPs/pull/213
 
   //Y^2 = X^3 + 3
-  uint constant p =  0x30644e72e131a029b85045b68181585d97816a916871ca8d3c208c16d87cfd47; //field modulus
+  uint constant p = 0x30644e72e131a029b85045b68181585d97816a916871ca8d3c208c16d87cfd47; //field modulus
 
   uint constant n = 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001; //curve order
 
@@ -37,8 +37,8 @@ contract ElectionECCwPrecompile is Ownable  {
     question = _question;
     generatorPoint[0] = 1;
     generatorPoint[1] = 2;
-    pubKeyOfOrganizer[0] = 0xd0988bfa799f7d7ef9ab3de97ef481cd0f75d2367ad456607647edde665d6f6f;
-    pubKeyOfOrganizer[1] = 0xbdd594388756a7beaf73b4822bc22d36e9bda7db82df2b8b623673eefc0b7495;
+    pubKeyOfOrganizer[0] = 0x1a619cedd96d8ecda3e1a09a577dc3f04422fa54a79b3a53ca5a077fe8b3dbf8;
+    pubKeyOfOrganizer[1] = 0x24f4f2f8f95269d63d7cb286934796d9e69ef2b6907d78e8d6ddc6e76cdd748d;
   }
 
   //blinded message should be recorded in order to be able to verify that Organizer provided a correct signature on the blinded msg
@@ -74,6 +74,22 @@ contract ElectionECCwPrecompile is Ownable  {
     eligibleVoters[_voter].eligible = false;
   }
 
+  function uintToString(uint v) constant returns (string str) {
+    uint maxlength = 78;
+    bytes memory reversed = new bytes(maxlength);
+    uint i = 0;
+    while (v != 0) {
+      uint remainder = v % 10;
+      v = v / 10;
+      reversed[i++] = byte(48 + remainder);
+    }
+    bytes memory s = new bytes(i);
+    for (uint j = 0; j < i; j++) {
+      s[j] = reversed[i - 1 - j];
+    }
+    str = string(s);
+  }
+
   //The core of the contract: onchain ECC BlindSig verification
   function verifyBlindSig(uint256 m, uint256 c, uint256 s) public {
     uint[2] memory cP = ecmul(pubKeyOfOrganizer[0], pubKeyOfOrganizer[1], c);
@@ -83,7 +99,7 @@ contract ElectionECCwPrecompile is Ownable  {
 
     uint projection = sum[0] % n;
 
-    require(c == uint(keccak256(m,projection)));
+    require(c == uint(keccak256(uintToString(m),uintToString(projection))));
   }
 
   function ecmul(uint256 x, uint256 y, uint256 scalar) public constant returns(uint256[2] p) {

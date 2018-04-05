@@ -17,7 +17,7 @@ function random(bytes){
 function random(bytes){
     do {
         var k = BigInteger.fromByteArrayUnsigned(crypto.randomBytes(bytes));
-    } while (k.toString() != "2")
+    } while (k.toString() != "13")
     return k;
 }
 */
@@ -70,7 +70,7 @@ var privateKey = new Buffer("1184cd2cdd640ca42cfc3a091c51d549b2f016d454b2774019c
 
 var m  = "69";
 
-var ecparams = ecurve.getCurveByName('secp256k1');
+var ecparams = ecurve.getCurveByName('altBN128'); //or secp256k1
 var curvePt = ecparams.G.multiply(BigInteger.fromBuffer(privateKey));
 var x = curvePt.affineX.toBuffer(32);
 var y = curvePt.affineY.toBuffer(32);
@@ -88,6 +88,7 @@ requester
 k = random(32);
 
 var R = multiply(G,k);
+
 
 /* Solidity test helper fucntions
 var zwei = BigInteger.fromBuffer(new Buffer("2"));
@@ -131,6 +132,7 @@ The requester calculates s = s’ + γ, and (c, s) is the signature on m.
 */
 
 var s = sBlind.add(γ);
+//console.log(s.mod(n).toHex())
 
 /* STEP 5
 Both the requester and signer can verify the signature (c, s) through the formation
