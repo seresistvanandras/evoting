@@ -1,27 +1,27 @@
 module.exports = function(server, env) {
-  const election = require('../votes/voting.js')(env);
+    const election = require('../votes/voting.js')(env);
 
-  // get data from EligibleVoter Mapping
-  server.get(
-    '/vote/:voter',
-    (req, res) => {
-      let model = election.getEligibleVoter(
-        req.params.voter
-      );
-      model.then( m => { res.send(JSON.stringify(m)); } );
-    }
-  );
+    // get data from EligibleVoter Mapping
+    server.get(
+        '/voter/:voter',
+        (req, res) => {
+        let model = election.getEligibleVoter(
+            req.params.voter
+        );
+    model.then( m => { res.send(JSON.stringify(m)); } );
+}
+);
 
     // get data from blindedVotes Mapping
     server.get(
-        '/bvotes/:blindedVotes',
+        '/blindedvotes/:blindedVotes',
         (req, res) => {
         let model = election.getBlindedVotes(
             req.params.blindedVotes
         );
     model.then( m => { res.send(JSON.stringify(m)); } );
-    }
-    );
+}
+);
 
     // get data from votes Mapping
     server.get(
@@ -31,46 +31,67 @@ module.exports = function(server, env) {
             req.params.votes
         );
     model.then( m => { res.send(JSON.stringify(m)); } );
-    }
-    );
+}
+);
 
-  // invite voter from EligibleVoter Mapping
-  server.post(
-    '/vote/:voter',
-    (req, res) => {
-      let model = election.postEligibleVoter(
-        req.params.voter
-      );
-      model.then( m => {
+    // get data from votes Mapping
+    server.get(
+        '/usedsignatures/:usedsignatures',
+        (req, res) => {
+            console.log("routes",req.params.usedsignatures);
+        let model = election.getUsedSignatures(
+            req.params.usedsignatures
+        );
+    model.then( m => { res.send(JSON.stringify(m)); } );
+}
+);
+
+    // get Question
+    server.get(
+        '/question',
+        (req, res) => {
+        let model = election.getQuestion(
+        );
+    model.then( m => { res.send(JSON.stringify(m)); } );
+}
+);
+
+    // invite voter from EligibleVoter Mapping
+    server.post(
+        '/vote/:voter',
+        (req, res) => {
+        let model = election.postEligibleVoter(
+            req.params.voter
+        );
+    model.then( m => {
         res.send(JSON.stringify(m));
-      } );
-    }
-  );
+} );
+}
+);
 
-  // remove voter from EligibleVoter Mapping
-  server.delete(
-    '/vote/:voter',
-    (req, res) => {
-      let model = election.deleteEligibleVoter(
-        req.params.member
-      );
-      model.then( m => { res.send(JSON.stringify(m)); } );
-    }
-  );
+    // remove voter from EligibleVoter Mapping
+    server.delete(
+        '/vote/:voter',
+        (req, res) => {
+        let model = election.deleteEligibleVoter(
+            req.params.voter
+        );
+    model.then( m => { res.send(JSON.stringify(m)); } );
+}
+);
 
-  // cast a vote from a newly generated Address
-  server.post(
-    '/cast/',
-    (req, res) => {
-      let model = election.castVote(
-        req.body.choiceCode,
-        req.body.vote,
-        req.body.hashVote,
-        req.body.blindlySignedVote
-      );
-      model.then( m => { res.send(JSON.stringify(m)); } );
-    }
-  );
+    // cast a vote from a newly generated Address
+    server.post(
+        '/cast/',
+        (req, res) => {
+        let model = election.castVote(
+            req.body.choiceCode,
+            req.body.c,
+            req.body.s
+        );
+    model.then( m => { res.send(JSON.stringify(m)); } );
+}
+);
 
     // Requires authority to blindly sign
     server.post(
@@ -80,8 +101,8 @@ module.exports = function(server, env) {
             req.body.blindedVote
         );
     model.then( m => { res.send(JSON.stringify(m)); } );
-    }
-    );
+}
+);
 
     server.post(
         '/bvotes/write/',
@@ -91,18 +112,19 @@ module.exports = function(server, env) {
             req.body.blindSig
         );
     model.then( m => { res.send(JSON.stringify(m)); } );
-    }
-    );
+}
+);
 
     server.post(
         '/bvotes/verify/',
         (req, res) => {
         let model = election.postVerifyBlindSig(
             req.body.vote,
+            req.body.blindedVote,
             req.body.blindlySignedVote
         );
     model.then( m => { res.send(JSON.stringify(m)); } );
-    }
-    );
+}
+);
 
 };

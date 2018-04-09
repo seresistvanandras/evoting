@@ -1,11 +1,14 @@
 pragma solidity ^0.4.18;
 
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
+import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 
-contract ElectionECCwPrecompile is Ownable  {
+contract ElectionECCwPrecompile is Ownable {
+  using SafeMath for uint256;
   mapping (address => Voter) public eligibleVoters;
   mapping (uint256 => address) public blindedVotes;
   mapping (uint256 => uint256) public votes; //counts the votes for specific options
+  mapping (uint256 => bool) public usedSignatures;
 
   string public question;
 
@@ -18,7 +21,7 @@ contract ElectionECCwPrecompile is Ownable  {
 
   // Base point (generator) G
 
-  //secp256k1 generator point
+  //altbn128 generator point
   uint256[2] public generatorPoint; //in affine coordinates
   uint256[2] public pubKeyOfOrganizer; //in affine coordinates
 
@@ -29,8 +32,8 @@ contract ElectionECCwPrecompile is Ownable  {
   }
 
   event RequestToBlindlySign(address indexed voter);
-  event voteSuccess(address indexed voter, uint256 hashOfVote);
-  event debug(uint256 vote, uint256 votehash);
+  event voteSuccess(address indexed voter, uint256 choiceCode);
+
 
   //constructor
   function ElectionECCwPrecompile (string _question) public {
@@ -54,16 +57,13 @@ contract ElectionECCwPrecompile is Ownable  {
     eligibleVoters[_voter].eligible = false;
   }
 
-
-//uint(keccak256(uint(1))): 80084422859880547211683076133703299733277748156566366325829078699459944778998
-//keccak256(uint(1)): 0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6
-//blindlySignedShit: 22249075885109206276024811279364626717013279169439911258
-  function Vote(uint256 choiceCode, uint256 vote, uint256 hashVote, uint256 c, uint256 s) public {
+  function Vote(uint256 choiceCode, uint256 c, uint256 s) public {
+    require(!usedSignatures[c]);
+    usedSignatures[c] = true;
     verifyBlindSig(choiceCode, c, s);
-    require(uint(keccak256(uintToString(vote))) == hashVote);
-    votes[choiceCode]++;
+    votes[choiceCode].add(1);
 
-    voteSuccess(msg.sender,hashVote);
+    voteSuccess(msg.sender,choiceCode);
   }
 
 
@@ -118,22 +118,22 @@ contract ElectionECCwPrecompile is Ownable  {
     }
   }
 
-}
+  }
 
-function ecadd(uint256 x1, uint256 y1, uint256 x2, uint256 y2) public constant returns (uint256[2] p) {
-// are all of these inside the precompile now?
-uint256[4] memory input;
-input[0] = x1;
-input[1] = y1;
-input[2] = x2;
-input[3] = y2;
+  function ecadd(uint256 x1, uint256 y1, uint256 x2, uint256 y2) public constant returns (uint256[2] p) {
+  // are all of these inside the precompile now?
+  uint256[4] memory input;
+  input[0] = x1;
+  input[1] = y1;
+  input[2] = x2;
+  input[3] = y2;
 
-assembly {
- if iszero(call(not(0), 0x06, 0, input, 0x80, p, 0x40)) {
-   revert(0, 0)
- }
-}
+  assembly {
+   if iszero(call(not(0), 0x06, 0, input, 0x80, p, 0x40)) {
+     revert(0, 0)
+   }
+  }
 
-}
+  }
 
 }
