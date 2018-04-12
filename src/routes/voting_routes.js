@@ -85,9 +85,9 @@ module.exports = function(server, env) {
         '/cast/',
         (req, res) => {
         let model = election.castVote(
-            req.body.choiceCode,
-            req.body.c,
-            req.body.s
+            req.body.ChoiceCode,
+            req.body.C,
+            req.body.S
         );
     model.then( m => { res.send(JSON.stringify(m)); } );
 }

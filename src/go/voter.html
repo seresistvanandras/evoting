@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>{{.PageTitle}}</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/sky-forms.css">
+    <script src="js/random.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+
+
+
+
+</head>
+<body class="bg-purple">
+<div class="body body-s">
+
+
+
+    <!-- multistep form -->
+    <form id="msform" class="sky-form">
+
+        <!-- fieldsets -->
+        <fieldset>
+
+            <h1 class="fs-title">{{.PageTitle}}</h1>
+    <section>
+        <h4 class="fs-subtitle">Question:</h4>
+    </section>
+
+<section>
+<h3 class="fs-subsubtitle">{{.PageQuestion}}</h3>
+</section>
+            <div class="input-container">
+
+                <input class="form-check-input" type="radio" name="radios" id="radios1" value="0">
+                <label class="form-check-label" for="radios1">
+                    Yay!
+                </label>
+            </div>
+
+            <div class="input-container">
+                <input class="form-check-input" type="radio" name="radios" id="radios2" value="1">
+                <label class="form-check-label" for="radios2">
+                    Best thing ever happened to me!
+                </label>
+            </div>
+
+            <input type="button" name="next" class="next button" value="Vote" action="/selected" onclick=use_api() />
+        </fieldset>
+        <fieldset>
+
+            <div class="text-center">
+                <h1 class="display-3">Thank You!</h1>
+                <p class="lead">Your vote has been successfully cast!</p>
+                </br>
+                <hr>
+                </br>
+                <p>
+                    <span>You can verify the transaction</span> <a id=response href="">here</a>
+                </p>
+
+            </div>
+        </fieldset>
+
+
+    </form>
+
+
+</div>
+</body>
+</html>

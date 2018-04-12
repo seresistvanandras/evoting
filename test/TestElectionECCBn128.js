@@ -32,7 +32,7 @@ contract('ElectionECCwPrecompile', function(accounts) {
     it("Vote", function() {
         return Election.deployed().then(function(instance) {
             electionContractInstance = instance;
-            return electionContractInstance.Vote(1,1,"90743482286830539503240959006302832933333810038750515972785732718729991261126","36569675563270980802762714306156177901149277261141117320653538205171502807189","6584969667293602680567734539575163142389903381909774456551685991814241531484");
+            return electionContractInstance.Vote(1,"36569675563270980802762714306156177901149277261141117320653538205171502807189","6584969667293602680567734539575163142389903381909774456551685991814241531484");
         }).then(function(member) {
             console.log(member);
             return electionContractInstance.votes.call(1).then(function (value) {

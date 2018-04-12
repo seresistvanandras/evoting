@@ -27,7 +27,7 @@ module.exports =(db) => {
 
         getQuestion: async function() {
             let questionData = await db.electionInstance.methods.question().call();
-            return {"votes":questionData};
+            return {"question":questionData};
         },
 
         postEligibleVoter: async function(voter) {
