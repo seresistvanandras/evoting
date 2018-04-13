@@ -1,7 +1,5 @@
 module.exports =(db) => {
     const ethJsUtil = require('ethereumjs-util');
-    const offlinetx = require("../crypto/offlinetx")(db);
-    const cache = require('../cache/txHelper.js')(db);
 
     return {
 
@@ -33,12 +31,6 @@ module.exports =(db) => {
         postEligibleVoter: async function(voter) {
 
             let txHash= db.electionInstance.methods.addEligibleVoter(voter).send({from:db.accounts[0]});
-            /*    let tx = db.electionInstance.methods.addEligibleVoter(voter);
-                let rawTx = await offlinetx.getTxJson(tx, {from: db.accounts[0], gasPrice: "0x00"});
-
-                cacheValues = await cache.writeUnsentTxToCache(rawTx);
-                cache.setCache(cacheValues[0], JSON.stringify(cacheValues[1]));
-            */
             return txHash;
         },
 

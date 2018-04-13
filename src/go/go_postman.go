@@ -128,13 +128,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-
-
-
 	http.HandleFunc("/", indexFunc)
 	http.HandleFunc("/admin", adminSelected)
 	http.HandleFunc("/voter", voterSelected)
 	http.HandleFunc("/selected", voteSelected)
+	http.HandleFunc("/checkVoteResults", checkVoteResults)
 
 	u, err := url.Parse(dir)
 	u.Path = path.Join(u.Path, "/css")
@@ -226,6 +224,8 @@ func indexFunc(w http.ResponseWriter, r *http.Request){
 	fmt.Println("Index")
 
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	fmt.Println(dir)
+	fmt.Println(os.Args[0])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -405,6 +405,10 @@ func voterSelected(w http.ResponseWriter, r *http.Request){
 
 
 
+}
+
+func checkVoteResults(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("madafaka")
 }
 
 func adminSelected(w http.ResponseWriter, r *http.Request){

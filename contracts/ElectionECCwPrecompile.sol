@@ -2,6 +2,7 @@ pragma solidity ^0.4.18;
 
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
+import {eccPrecompiles} from 'contracts/utils/preCompiles.sol';
 
 contract ElectionECCwPrecompile is Ownable {
   using SafeMath for uint256;
@@ -93,47 +94,14 @@ contract ElectionECCwPrecompile is Ownable {
 
   //The core of the contract: onchain ECC BlindSig verification
   function verifyBlindSig(uint256 m, uint256 c, uint256 s) public {
-    uint[2] memory cP = ecmul(pubKeyOfOrganizer[0], pubKeyOfOrganizer[1], c);
-    uint[2] memory sG = ecmul(generatorPoint[0], generatorPoint[1], s);
+    uint[2] memory cP = eccPrecompiles.ecmul(pubKeyOfOrganizer[0], pubKeyOfOrganizer[1], c);
+    uint[2] memory sG = eccPrecompiles.ecmul(generatorPoint[0], generatorPoint[1], s);
 
-    uint[2] memory sum = ecadd(cP[0], cP[1], sG[0], sG[1]);
+    uint[2] memory sum = eccPrecompiles.ecadd(cP[0], cP[1], sG[0], sG[1]);
 
     uint projection = sum[0] % n;
 
     require(c == uint(keccak256(uintToString(m),uintToString(projection))));
-  }
-
-  function ecmul(uint256 x, uint256 y, uint256 scalar) public constant returns(uint256[2] p) {
-
-  // With a public key (x, y), this computes p = scalar * (x, y).
-  uint256[3] memory input;
-  input[0] = x;
-  input[1] = y;
-  input[2] = scalar;
-
-  assembly {
-    // call ecmul precompile
-    if iszero(call(not(0), 0x07, 0, input, 0x60, p, 0x40)) {
-      revert(0, 0)
-    }
-  }
-
-  }
-
-  function ecadd(uint256 x1, uint256 y1, uint256 x2, uint256 y2) public constant returns (uint256[2] p) {
-  // are all of these inside the precompile now?
-  uint256[4] memory input;
-  input[0] = x1;
-  input[1] = y1;
-  input[2] = x2;
-  input[3] = y2;
-
-  assembly {
-   if iszero(call(not(0), 0x06, 0, input, 0x80, p, 0x40)) {
-     revert(0, 0)
-   }
-  }
-
   }
 
 }

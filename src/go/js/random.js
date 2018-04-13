@@ -57,6 +57,10 @@ $( document ).ready(function() {
 
 });
 
+function myTest() {
+    console.log("fosss");
+}
+
 function use_api() {
 
     $.ajax({
