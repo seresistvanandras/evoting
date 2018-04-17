@@ -13,6 +13,7 @@ html, body {
     background-position: 50% 50%;
     background-size: cover;
 }
+
 a {
     text-decoration: underline;
 }
@@ -51,7 +52,7 @@ a:hover {
     color: #232323;
 }
 .sky-form fieldset {
-    display: block;
+
     padding: 25px 30px 5px;
     border: none;
     background: rgba(255,255,255,.9);
@@ -1698,7 +1699,7 @@ a:hover {
     color: #ee9393;
 }
 
-#admin input, #admin textarea {
+.admin input, .admin textarea {
     padding: 15px;
     border: 1px solid #ccc;
     border-radius: 3px;
@@ -1710,7 +1711,7 @@ a:hover {
     font-size: 13px;
 }
 
-#admin #results input.previous, #admin #addVoter input.previous{
+.admin #results input.previous, .admin #addVoter input.previous, .admin #addVoterSuccess input.previous{
     padding: 10px;
     width: auto;
     position: relative;
@@ -1912,7 +1913,7 @@ a:hover {
 
 
 #msform fieldset {
-    background: white;
+
     border: 0 none;
     border-radius: 3px;
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);

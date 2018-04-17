@@ -58,7 +58,7 @@ module.exports = function(server, env) {
 
     // invite voter from EligibleVoter Mapping
     server.post(
-        '/vote/:voter',
+        '/voter/:voter',
         (req, res) => {
         let model = election.postEligibleVoter(
             req.params.voter

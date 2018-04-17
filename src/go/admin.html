@@ -25,7 +25,7 @@
 
 
     <!-- multistep form -->
-    <form id="admin" class="sky-form">
+    <form id="msform" class="admin sky-form">
 
         <!-- fieldsets -->
         <fieldset id="baseField">
@@ -66,19 +66,20 @@
             <input type="button" name="previous" class="previous action-button" value="Previous" />
             <h1 class="fs-title">{{.PageTitle}}</h1>
             <h3 class="fs-subtitle">Add voter</h3>
-            <input type="text" name="address" placeholder="Ethereum Address" />
+            <input type="text" id="address" name="address" placeholder="Ethereum Address" />
             <hr>
-            <input type="button" name="next" id="addVoterButton" class="button" value="Add" action="/addVoter" onclick="add_voter()" />
+            <input type="button" name="next" class="next button" value="Vote" action="/addVoter" onclick="add_voter()" />
         </fieldset>
 
         <fieldset id="addVoterSuccess">
 
-            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <input type="button" name="previous" class="previous action-button" value="Back" />
 
+            <hr>
+            <br>
             <div class="text-center">
-                <p class="lead">Your vote has been successfully cast!</p>
+                <p class="lead"><a id=response href="">Voter</a> has been added!</p>
                 </br>
-
             </div>
         </fieldset>
 

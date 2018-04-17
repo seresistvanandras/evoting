@@ -572,7 +572,7 @@ func addVoter(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// generate page by passing page variables into template
-	t, err := template.ParseFiles(dir+"index.html") //parse the html file homepage.html
+	t, err := template.ParseFiles(dir+"/index.html") //parse the html file homepage.html
 	if err != nil { // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
@@ -586,19 +586,14 @@ func addVoter(w http.ResponseWriter, r *http.Request) {
 	splitted := a.Split(r.URL.RawQuery, -1)
 
 
-	var resp= reqPost(base_url+"/voter/", string(splitted[1]))
+	var resp= reqPost(base_url+"/voter/"+splitted[1], "")
 
 	txResp := TxResponse{}
 	if err := json.Unmarshal([]byte(resp), &txResp); err != nil {
 		return
 	}
 
-	fmt.Println(txResp)
-	fmt.Println(resp)
-
-
-
-	fmt.Fprintln(w, "https://rinkeby.etherscan.io/tx/")
+	fmt.Fprintln(w, "https://rinkeby.etherscan.io/tx/"+txResp.TransactionHash)
 
 
 

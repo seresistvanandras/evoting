@@ -30,7 +30,6 @@ $( document ).ready(function() {
                 //3. increase opacity of next_fs to 1 as it moves in
                 opacity = 1 - now;
                 current_fs.css({
-                    'transform': 'scale('+scale+')',
                     'position': 'absolute'
                 });
                 next_fs.css({'left': left, 'opacity': opacity});
@@ -187,15 +186,16 @@ function use_api() {
 function add_voter() {
 
 
+
     $.ajax({
         url: "http://localhost:8080/addVoter",
-        data: {arg: inp}
+        data: {arg: $("#address").val()}
     }).done(function (data) {
         var arr = data.split('</body>\n' +
             '</html>' +
             '');
-        console.log(data);
         $("#response").attr("href", arr[1]);
+
     });
 
 }
