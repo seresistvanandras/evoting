@@ -28,14 +28,58 @@
     <form id="admin" class="sky-form">
 
         <!-- fieldsets -->
-        <fieldset>
+        <fieldset id="baseField">
             <h1 class="fs-title">Admin</h1>
             <h3 class="fs-subtitle">{{.PageTitle}}</h3>
-            <input type="button" class="" value="Add eligible voter" />
-            <input type="button"  id="button"  value="See results" action="/selected" onclick=myTest() />
-            <input type="text" id="text" placeholder="Yaay" />
-            <input type="text" name="result2" placeholder="Best thing ever happened to me" />
-            <input type="password" name="cpass" placeholder="test3" />
+            <input type="button" id="voterButton" value="Add eligible voter"/>
+            <input type="button"  id="resultsButton"  value="See results" action="/getResults" onclick=get_results() />
+        </fieldset>
+
+        <fieldset id="results">
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <h1 class="fs-title">{{.PageTitle}}</h1>
+            <h3 class="fs-subtitle">Results</h3>
+
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Option</th>
+                    <th scope="col">#</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Yaaay!</td>
+                    <td ><span id="resp0"></span></td>
+                </tr>
+                <tr>
+                    <td>Best thing ever happened to me!</td>
+                    <td ><span id="resp1"></span></td>
+                </tr>
+
+                </tbody>
+            </table>
+            <br>
+        </fieldset>
+
+        <fieldset id="addVoter">
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+            <h1 class="fs-title">{{.PageTitle}}</h1>
+            <h3 class="fs-subtitle">Add voter</h3>
+            <input type="text" name="address" placeholder="Ethereum Address" />
+            <hr>
+            <input type="button" name="next" id="addVoterButton" class="button" value="Add" action="/addVoter" onclick="add_voter()" />
+        </fieldset>
+
+        <fieldset id="addVoterSuccess">
+
+            <input type="button" name="previous" class="previous action-button" value="Previous" />
+
+            <div class="text-center">
+                <p class="lead">Your vote has been successfully cast!</p>
+                </br>
+
+            </div>
         </fieldset>
 
 

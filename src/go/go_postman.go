@@ -81,6 +81,10 @@ type TxResponse struct {
 	} `json:"events"`
 }
 
+type votesStruct struct {
+	Votes string `json:"votes"`
+}
+
 func main() {
 /*
 	base_url := "http://localhost:8000"
@@ -132,7 +136,9 @@ func main() {
 	http.HandleFunc("/admin", adminSelected)
 	http.HandleFunc("/voter", voterSelected)
 	http.HandleFunc("/selected", voteSelected)
-	http.HandleFunc("/checkVoteResults", checkVoteResults)
+
+	http.HandleFunc("/addVoter", addVoter)
+	http.HandleFunc("/getResults", getResults)
 
 	u, err := url.Parse(dir)
 	u.Path = path.Join(u.Path, "/css")
@@ -407,10 +413,6 @@ func voterSelected(w http.ResponseWriter, r *http.Request){
 
 }
 
-func checkVoteResults(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("madafaka")
-}
-
 func adminSelected(w http.ResponseWriter, r *http.Request){
 
 	fmt.Println("admin selected")
@@ -541,14 +543,94 @@ func voteSelected(w http.ResponseWriter, r *http.Request) {
 
 
 
-	fmt.Fprintln(w, "https://rinkeby.etherscan.io/tx/"+txResp.BlockHash)
+	fmt.Fprintln(w, "https://rinkeby.etherscan.io/tx/"+txResp.TransactionHash)
 
 
+
+
+}
+
+func addVoter(w http.ResponseWriter, r *http.Request) {
+
+
+	fmt.Println("addVoter")
+
+
+	//base_url := "http://localhost:8000"
+
+
+	Title := "E-voting API test"
+	MyPageVariables := PageVariables{
+		PageTitle: Title,
+	}
+
+	// generate page by passing page variables into template
+	t, err := template.ParseFiles("/home/jani/Documents/Projects/evoting/src/go/index.html") //parse the html file homepage.html
+	if err != nil { // if there is an error
+		log.Print("template parsing error: ", err) // log it
+	}
+
+	err = t.Execute(w, MyPageVariables) //execute the template and pass it the HomePageVars struct to fill in the gaps
+	if err != nil { // if there is an error
+		log.Print("template executing error: ", err) //log it
+	}
+
+
+
+
+
+	fmt.Fprintln(w, "https://rinkeby.etherscan.io/tx/")
+
+
+
+
+}
+
+func getResults(w http.ResponseWriter, r *http.Request) {
+
+
+	fmt.Println("getResults")
+
+
+	base_url := "http://localhost:8000"
+
+
+	Title := "E-voting API test"
+	MyPageVariables := PageVariables{
+		PageTitle: Title,
+	}
+
+	// generate page by passing page variables into template
+	t, err := template.ParseFiles("/home/jani/Documents/Projects/evoting/src/go/index.html") //parse the html file homepage.html
+	if err != nil { // if there is an error
+		log.Print("template parsing error: ", err) // log it
+	}
+
+	err = t.Execute(w, MyPageVariables) //execute the template and pass it the HomePageVars struct to fill in the gaps
+	if err != nil { // if there is an error
+		log.Print("template executing error: ", err) //log it
+	}
+
+
+	var resp0= reqGet(base_url+"/votes/0")
+	var resp1= reqGet(base_url+"/votes/1")
+
+	txResp0 := votesStruct{}
+	if err := json.Unmarshal([]byte(resp0), &txResp0); err != nil {
+		return
+	}
+
+	txResp1 := votesStruct{}
+	if err := json.Unmarshal([]byte(resp1), &txResp1); err != nil {
+		return
+	}
+
+	fmt.Fprintln(w, txResp0.Votes+","+txResp1.Votes)
 
 
 }
 
 func getQuestion (base_url string) string{
 	return reqGet(base_url+"/question")
-
 }
+

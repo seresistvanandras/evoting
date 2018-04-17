@@ -62,7 +62,7 @@ contract ElectionECCwPrecompile is Ownable {
     require(!usedSignatures[c]);
     usedSignatures[c] = true;
     verifyBlindSig(choiceCode, c, s);
-    votes[choiceCode].add(1);
+    votes[choiceCode] = votes[choiceCode].add(1);
 
     voteSuccess(msg.sender,choiceCode);
   }

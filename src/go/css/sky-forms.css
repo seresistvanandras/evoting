@@ -1601,12 +1601,20 @@ a:hover {
 .sky-form .button {
     background-color: #2da5da;
     opacity: 0.8;
+    width: auto;
     transition: opacity 0.2s;
     -o-transition: opacity 0.2s;
     -ms-transition: opacity 0.2s;
     -moz-transition: opacity 0.2s;
     -webkit-transition: opacity 0.2s;
 }
+
+.sky-form #addVoter input.button{
+    padding: 0 25px;
+    width: auto;
+    color: #fff;
+}
+
 .sky-form .button.button-secondary {
     background-color: #b3b3b3;
 }
@@ -1700,6 +1708,13 @@ a:hover {
     font-family: montserrat;
     color: #2C3E50;
     font-size: 13px;
+}
+
+#admin #results input.previous, #admin #addVoter input.previous{
+    padding: 10px;
+    width: auto;
+    position: relative;
+    top: -10px;
 }
 
 
