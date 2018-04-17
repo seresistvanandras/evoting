@@ -230,8 +230,6 @@ func indexFunc(w http.ResponseWriter, r *http.Request){
 	fmt.Println("Index")
 
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	fmt.Println(dir)
-	fmt.Println(os.Args[0])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -292,7 +290,7 @@ func DisplayRadioButtons(w http.ResponseWriter, r *http.Request){
 	}
 	fmt.Println(dir)
 
-	t, err := template.ParseFiles("admin.html") //parse the html file homepage.html
+	t, err := template.ParseFiles(dir+"admin.html") //parse the html file homepage.html
 
 	if err != nil { // if there is an error
 		log.Print("template parsing error: ", err) // log it
@@ -513,8 +511,12 @@ func voteSelected(w http.ResponseWriter, r *http.Request) {
 		PageTitle: Title,
 	}
 
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
 	// generate page by passing page variables into template
-	t, err := template.ParseFiles("/home/jani/Documents/Projects/evoting/src/go/index.html") //parse the html file homepage.html
+	t, err := template.ParseFiles(dir+"/index.html") //parse the html file homepage.html
 	if err != nil { // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
@@ -556,7 +558,7 @@ func addVoter(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("addVoter")
 
 
-	//base_url := "http://localhost:8000"
+	base_url := "http://localhost:8000"
 
 
 	Title := "E-voting API test"
@@ -564,8 +566,13 @@ func addVoter(w http.ResponseWriter, r *http.Request) {
 		PageTitle: Title,
 	}
 
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// generate page by passing page variables into template
-	t, err := template.ParseFiles("/home/jani/Documents/Projects/evoting/src/go/index.html") //parse the html file homepage.html
+	t, err := template.ParseFiles(dir+"index.html") //parse the html file homepage.html
 	if err != nil { // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
@@ -575,7 +582,19 @@ func addVoter(w http.ResponseWriter, r *http.Request) {
 		log.Print("template executing error: ", err) //log it
 	}
 
+	a := regexp.MustCompile("=")
+	splitted := a.Split(r.URL.RawQuery, -1)
 
+
+	var resp= reqPost(base_url+"/voter/", string(splitted[1]))
+
+	txResp := TxResponse{}
+	if err := json.Unmarshal([]byte(resp), &txResp); err != nil {
+		return
+	}
+
+	fmt.Println(txResp)
+	fmt.Println(resp)
 
 
 
@@ -600,8 +619,13 @@ func getResults(w http.ResponseWriter, r *http.Request) {
 		PageTitle: Title,
 	}
 
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// generate page by passing page variables into template
-	t, err := template.ParseFiles("/home/jani/Documents/Projects/evoting/src/go/index.html") //parse the html file homepage.html
+	t, err := template.ParseFiles(dir+"/index.html") //parse the html file homepage.html
 	if err != nil { // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
