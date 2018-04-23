@@ -32,4 +32,30 @@ assembly {
 }
 
 }
+
+//bigModexp
+    function expmod(uint256 base, uint256 e, uint256 m) public constant returns (uint256 o) {
+        // are all of these inside the precompile now?
+
+        assembly {
+        // define pointer
+            let p := mload(0x40)
+        // store data assembly-favouring ways
+            mstore(p, 0x20)             // Length of Base
+            mstore(add(p, 0x20), 0x20)  // Length of Exponent
+            mstore(add(p, 0x40), 0x20)  // Length of Modulus
+            mstore(add(p, 0x60), base)  // Base
+            mstore(add(p, 0x80), e)     // Exponent
+            mstore(add(p, 0xa0), m)     // Modulus
+        // call modexp precompile! -- old school gas handling
+            let success := call(sub(gas, 2000), 0x05, 0, p, 0xc0, p, 0x20)
+        // gas fiddling
+            switch success case 0 {
+                revert(0, 0)
+            }
+        // data
+            o := mload(p)
+        }
+
+    }
 }

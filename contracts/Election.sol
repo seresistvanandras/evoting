@@ -3,6 +3,7 @@ pragma solidity ^0.4.18;
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import {ECCMath} from "crypto/ECCMath.sol";
 import {Secp256k1} from "crypto/Secp256k1.sol";
+import {eccPrecompiles} from './utils/preCompiles.sol';
 
 contract Election is Ownable  {
   mapping (address => Voter) public eligibleVoters;
@@ -72,7 +73,7 @@ contract Election is Ownable  {
     eligibleVoters[_voter].eligible = false;
   }
   function verifyBlindSig(uint256 vote,uint256 blindlySignedVote) public returns (bool){
-    require(ECCMath.expmod(blindlySignedVote,publicExponent,publicModulo) == (vote % publicModulo));
+    require(eccPrecompiles.expmod(blindlySignedVote,publicExponent,publicModulo) == (vote % publicModulo));
   }
 
   function generatingSigs() public {

@@ -1,0 +1,419 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server for blockchain-based e-voting server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters."
+  version: "1.0.0"
+  title: "A blockchain-based e-voting platform"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "istvan.seres@interticket.net"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8000"
+basePath: "/v2"
+tags:
+- name: "vote"
+  description: "Everything about the voting process"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "user"
+  description: "Operations about user"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "http://swagger.io"
+schemes:
+- "http"
+paths:
+  /usedSignatures/{usedSignatures}:
+    get:
+      tags:
+      - "vote"
+      summary: "Gets data about ECC blind signature"
+      description: ""
+      operationId: "getSignatureData"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "usedSignatures"
+        in: "path"
+        description: "First coordinate of the signature"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /blindedVotes/{blindedVotes}:
+    get:
+      tags:
+      - "vote"
+      summary: "Gets data about {blindedVotes}"
+      description: ""
+      operationId: "getBlindedVote"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "blindedVotes"
+        in: "path"
+        description: "blinded Vote created by the administrator"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /votes/{votes}:
+    get:
+      tags:
+      - "vote"
+      summary: "Gets number of casted votes for option {votes}"
+      description: ""
+      operationId: "getVoteCount"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "votes"
+        in: "path"
+        description: "Option to be queried"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /voter/{voterAddress}:
+    get:
+      tags:
+      - "vote"
+      summary: "Gets data about eligible voter"
+      description: ""
+      operationId: "getVoter"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "voterAddress"
+        in: "path"
+        description: "Ethereum address of eligible voter"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    post:
+      tags:
+      - "vote"
+      summary: "Add a new eligible voter to the census"
+      description: ""
+      operationId: "addVoter"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "voterAddress"
+        in: "path"
+        description: "Ethereum address of eligible voter"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    delete:
+      tags:
+      - "vote"
+      summary: "Deletes voter from the census"
+      description: ""
+      operationId: "deleteVoter"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "voterAddress"
+        in: "path"
+        description: "Ethereum address of eligible voter"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Voter not found"
+        405:
+          description: "Validation exception"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /bvotes/verify:
+    post:
+      tags:
+      - "vote"
+      summary: "Verifies blind signature on blinded vote"
+      description: ""
+      operationId: "verifyBlindedVotes"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Option which was voted"
+        required: true
+        schema:
+          $ref: "#/definitions/blindlySignedVote"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /bvotes/req:
+    post:
+      tags:
+      - "vote"
+      summary: "Requests blind signature on blinded vote"
+      description: ""
+      operationId: "requestBlindedVotes"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "blinded Vote"
+        required: true
+        schema:
+          $ref: "#/definitions/blindedVote"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /bvotes/write:
+    post:
+      tags:
+      - "vote"
+      summary: "Posts blinded vote to the contract"
+      description: ""
+      operationId: "writeBlindedVotes"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Voter address and blindSig"
+        required: true
+        schema:
+          $ref: "#/definitions/Voter"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /cast:
+    post:
+      tags:
+      - "vote"
+      summary: "Casts the ballot"
+      description: ""
+      operationId: "castVote"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "Ballot"
+        required: true
+        schema:
+          $ref: "#/definitions/Ballot"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /question:
+    get:
+      tags:
+      - "vote"
+      summary: "Gets election's question"
+      description: ""
+      operationId: "getQuestion"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Order:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      petId:
+        type: "integer"
+        format: "int64"
+      quantity:
+        type: "integer"
+        format: "int32"
+      shipDate:
+        type: "string"
+        format: "date-time"
+      status:
+        type: "string"
+        description: "Order Status"
+        enum:
+        - "placed"
+        - "approved"
+        - "delivered"
+      complete:
+        type: "boolean"
+        default: false
+    xml:
+      name: "Order"
+  Category:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Category"
+  Ballot:
+    type: "object"
+    properties:
+      choiceCode:
+        type: "integer"
+        format: "int64"
+      C:
+        type: "string"
+      S:
+        type: "string"
+    xml:
+      name: "Ballot"
+  Voter:
+    type: "object"
+    properties:
+      address:
+        type: "integer"
+        format: "int64"
+      blindSig:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "Voter"
+  blindlySignedVote:
+    type: "object"
+    required:
+    - "vote"
+    - "blindedVote"
+    - "blindlySignedVote"
+    properties:
+      vote:
+        type: "string"
+        example: "43"
+      blindedVote:
+        type: "integer"
+        format: "int64"
+      blindlySignedVote:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "blindlySignedVote"
+  blindedVote:
+    type: "object"
+    properties:
+      blindedVote:
+        type: "integer"
+        format: "int64"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

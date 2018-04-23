@@ -4,7 +4,7 @@ var Election = artifacts.require("Election");
 contract('Election', function(accounts) {
 
   let electionContractInstance;
-
+/*
   it("Organizer should be able to register eligible voters", function() {
     return Election.deployed().then(function(instance) {
       electionContractInstance = instance;
@@ -27,9 +27,10 @@ contract('Election', function(accounts) {
         assert.equal(member[0], false, "Second account should have been removed!")
       });
     });
-
+*/
     it("Voters should be able to vote", function() {
         return Election.deployed().then(function(instance) {
+            electionContractInstance = instance;
             electionContractInstance.addEligibleVoter(accounts[0]);
             electionContractInstance.Vote(1,1,"80084422859880547211683076133703299733277748156566366325829078699459944778998",12);
             return electionContractInstance.votes.call(1);
@@ -37,7 +38,7 @@ contract('Election', function(accounts) {
             assert.equal(member.toNumber(), 1, "Vote has been cast");
         });
     });
-
+/*
     it("Votesuccess event should be emitted", function() {
         return Election.deployed().then(function(instance) {
             electionContractInstance.addEligibleVoter(accounts[0]);
@@ -57,7 +58,7 @@ contract('Election', function(accounts) {
             assert.ok(true, "Passed");
         });
     });
-
+*/
 
 
 
