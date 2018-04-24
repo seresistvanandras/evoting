@@ -5,5 +5,5 @@ module.exports = function(deployer) {
     deployer.deploy(preCompiles);
 
     deployer.link(preCompiles, Election);
-    deployer.deploy(Election, "How do you like STARTUP SAFARY BUDAPEST 2018?");
+    deployer.deploy(Election, "How much do you like EIT DIGITAL ALUMNI ANNUAL MEETING 2018?");
 };
