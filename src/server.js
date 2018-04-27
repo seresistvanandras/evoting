@@ -22,7 +22,7 @@ let App = {
         App.server = Express();
 
         App.initWeb3().then( () => {
-            App.port = 8000;
+            App.port = 8001;
         App.startServing();
     });
     },

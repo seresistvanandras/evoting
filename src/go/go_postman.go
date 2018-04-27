@@ -307,7 +307,7 @@ func voterSelected(w http.ResponseWriter, r *http.Request){
 
 	fmt.Println("voter")
 
-	base_url := "http://localhost:8000"
+	base_url := "http://localhost:8001"
 
 	question := Question{}
 	if err := json.Unmarshal([]byte(getQuestion(base_url)), &question); err != nil {
@@ -351,6 +351,7 @@ func voterSelected(w http.ResponseWriter, r *http.Request){
 		log.Fatal(err)
 	}
 
+	fmt.Println("kakkkkk"+dir)
 
 	t, err := template.ParseFiles(dir+"/voter.html") //parse the html file homepage.html
 	if err != nil { // if there is an error
@@ -503,7 +504,7 @@ func voteSelected(w http.ResponseWriter, r *http.Request) {
 	a := regexp.MustCompile("=")
 	splitted := a.Split(r.URL.RawQuery, -1)
 
-	base_url := "http://localhost:8000"
+	base_url := "http://localhost:8001"
 
 
 	Title := "E-voting API test"
@@ -558,7 +559,7 @@ func addVoter(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("addVoter")
 
 
-	base_url := "http://localhost:8000"
+	base_url := "http://localhost:8001"
 
 
 	Title := "E-voting API test"
@@ -606,7 +607,7 @@ func getResults(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("getResults")
 
 
-	base_url := "http://localhost:8000"
+	base_url := "http://localhost:8001"
 
 
 	Title := "E-voting API test"

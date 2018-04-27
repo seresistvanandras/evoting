@@ -2,7 +2,7 @@ pragma solidity ^0.4.19;
 
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
-import {eccPrecompiles} from 'contracts/utils/preCompiles.sol';
+import {eccPrecompiles} from './utils/preCompiles.sol';
 
 contract ElectionECCwCommitReveal is Ownable {
   using SafeMath for uint256;
