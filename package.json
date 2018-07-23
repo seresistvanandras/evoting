@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "description": "A blockchain-based e-voting platform developed by Blockchain Competence Center @Budapest, Hungary",
   "main": "src/server.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.js"
   },
   "repository": {
@@ -23,16 +19,17 @@
   "homepage": "https://github.com/itblockchain/evoting#readme",
   "dependencies": {
     "bigi": "^1.4.2",
+    "bignumber.js": "^7.0.2",
     "coinstring": "^2.0.0",
     "ecurve": "^1.0.0",
     "ethereumjs-util": "^5.1.5",
     "express": "^4.16.2",
     "node-forge": "^0.7.4",
     "truffle": "^4.1.3",
-    "web3": "^1.0.0-beta.30",
-    "zeppelin-solidity": "1.7.0"
+    "web3": "^1.0.0-beta.34",
+    "zeppelin-solidity": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^1.17.1"
+    "nodemon": "^1.18.2"
   }
 }
